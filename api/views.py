@@ -192,12 +192,12 @@ class PostView(APIView):
 
     def post(self, request):
         data = request.data.copy()
-        data['author'] = request.user.id
         data['status'] = Post.Status.PENDING
 
         serializer = PostSerializer(data=data)
         if serializer.is_valid():
-            post = serializer.save()
+            post = serializer.save(author=request.user) 
+
             return JsonResponse(
                 {
                     "message": "Post created and pending approval",
@@ -212,6 +212,7 @@ class PostView(APIView):
             )
 
         return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
     def get(self, request, id):
         try:
@@ -246,9 +247,13 @@ class PostView(APIView):
                 status=status.HTTP_403_FORBIDDEN
             )
 
-        serializer = PostSerializer(post, data=request.data, partial=True)
+        data = request.data.copy()
+        data.pop('author', None)
+
+        serializer = PostSerializer(post, data=data, partial=True)
         if serializer.is_valid():
             post = serializer.save(status=Post.Status.PENDING)
+
             return JsonResponse(
                 {
                     "message": "Post updated and sent for re-approval",
@@ -262,6 +267,7 @@ class PostView(APIView):
             )
 
         return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
     def delete(self, request, id):
         try:
@@ -300,8 +306,6 @@ class MyPostsView(APIView):
         )
 
 
-
-from rest_framework.permissions import AllowAny
 
 class PublicPostView(APIView):
     permission_classes = [AllowAny]
