@@ -17,6 +17,16 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
+    author = serializers.CharField(source='author.name', read_only=True)
+
     class Meta:
         model = Post
-        fields = '__all__'
+        fields = [
+            'id',
+            'title',
+            'content',
+            'author',
+            'status',
+            'created_at',
+            'updated_at'
+        ]
