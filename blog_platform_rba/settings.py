@@ -28,7 +28,12 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = [".onrender.com","*"]
+ALLOWED_HOSTS = [
+    "blog-app-946c.onrender.com",
+    "blog-app-chi-mocha.vercel.app",
+    "localhost",
+    "127.0.0.1",
+]
 CORS_ALLOW_ALL_ORIGINS = True
 
 
@@ -145,4 +150,12 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ),
 }
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://blog-app-chi-mocha.vercel.app",
+]
+
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
