@@ -8,7 +8,7 @@ import PostDetail from "./pages/PostDetail";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ProtectedRoute from "./components/ProtectedRoute";
-import MyPosts from "./pages/Author/MyPosts";
+import MyPosts from "./pages/author/MyPosts";
 import CreatePost from "./pages/author/CreatePost";
 import EditPost from "./pages/author/EditPost";
 import Dashboard from "./pages/admin/Dashboard";
