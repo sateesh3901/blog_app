@@ -21,8 +21,10 @@ function PublicPosts() {
           </Card.Header>
           <Card.Body>
             <Card.Text>{post.content.slice(0, 150)}...</Card.Text>
-
-            <small className="text-muted">Author: {post.author}</small>
+            <small className="text-muted">
+              Author:{" "}
+              <span className="badge bg-secondary ms-1">{post.author}</span>
+            </small>
 
             <div className="mt-2">
               <Button as={Link} to={`/post/${post.id}`} size="sm">
