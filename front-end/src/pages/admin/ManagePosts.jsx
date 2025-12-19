@@ -5,55 +5,40 @@ import api from "../../services/api";
 function ManagePosts() {
   const [posts, setPosts] = useState([]);
 
-  const fetchPosts = async () => {
+  const load = async () => {
     const res = await api.get("/api/admin/posts/pending/");
     setPosts(res.data);
   };
 
   useEffect(() => {
-    fetchPosts();
+    load();
   }, []);
 
   const updateStatus = async (id, status) => {
     await api.put(`/api/admin/posts/${id}/status/`, { status });
-    fetchPosts();
-  };
-
-  const deletePost = async (id) => {
-    await api.delete(`/api/admin/posts/${id}/`);
-    fetchPosts();
+    load();
   };
 
   return (
     <Container className="mt-4">
       <h3>Pending Posts</h3>
-
-      {posts.map((post) => (
-        <Card key={post.id} className="mb-3">
+      {posts.map((p) => (
+        <Card key={p.id} className="mb-3">
           <Card.Body>
-            <Card.Title>{post.title}</Card.Title>
-            <Card.Text>{post.content}</Card.Text>
-
-            <div className="d-flex gap-2">
-              <Button
-                variant="success"
-                onClick={() => updateStatus(post.id, "APPROVED")}
-              >
-                Approve
-              </Button>
-
-              <Button
-                variant="warning"
-                onClick={() => updateStatus(post.id, "REJECTED")}
-              >
-                Reject
-              </Button>
-
-              <Button variant="danger" onClick={() => deletePost(post.id)}>
-                Delete
-              </Button>
-            </div>
+            <Card.Title>{p.title}</Card.Title>
+            <Card.Text>{p.content}</Card.Text>
+            <Button onClick={() => updateStatus(p.id, "APPROVED")}>
+              Approve
+            </Button>{" "}
+            <Button
+              variant="danger"
+              onClick={() => updateStatus(p.id, "REJECTED")}
+            >
+              Reject
+            </Button>
+            <p className="text-muted">Author: {p.author}</p>
           </Card.Body>
+          <span className="badge bg-warning me-2">{p.status}</span>
         </Card>
       ))}
     </Container>

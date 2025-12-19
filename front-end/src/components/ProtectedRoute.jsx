@@ -4,12 +4,14 @@ import { useAuth } from "../context/AuthContext";
 function ProtectedRoute({ children, role }) {
   const { user } = useAuth();
 
+  // Not logged in
   if (!user) {
     return <Navigate to="/login" />;
   }
 
+  // Logged in but wrong role
   if (role && user.role !== role) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/" />;
   }
 
   return children;

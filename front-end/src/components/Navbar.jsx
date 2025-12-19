@@ -1,9 +1,15 @@
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 function AppNavbar() {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/"); // 👈 redirect to landing page
+  };
 
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
@@ -11,16 +17,19 @@ function AppNavbar() {
         <Navbar.Brand as={Link} to="/">
           Blog Platform
         </Navbar.Brand>
+
         <Navbar.Toggle />
         <Navbar.Collapse>
           <Nav className="ms-auto">
-            <Nav.Link as={Link} to="/posts">
-              Posts
-            </Nav.Link>
-
             {!user && (
               <>
-                <Nav.Link as={Link} to="/signup">
+                <Nav.Link as={Link} to="/">
+                  Home
+                </Nav.Link>
+                <Nav.Link as={Link} to="/posts">
+                  Posts
+                </Nav.Link>
+                <Nav.Link as={Link} to="/register">
                   Signup
                 </Nav.Link>
                 <Nav.Link as={Link} to="/login">
@@ -30,9 +39,17 @@ function AppNavbar() {
             )}
 
             {user?.role === "AUTHOR" && (
-              <Nav.Link as={Link} to="/author/posts">
-                My Posts
-              </Nav.Link>
+              <>
+                <Nav.Link as={Link} to="/">
+                  Home
+                </Nav.Link>
+                <Nav.Link as={Link} to="/author/posts">
+                  My Posts
+                </Nav.Link>
+                <Nav.Link as={Link} to="/author/posts/create">
+                  Create Post
+                </Nav.Link>
+              </>
             )}
 
             {user?.role === "ADMIN" && (
@@ -50,7 +67,7 @@ function AppNavbar() {
             )}
 
             {user && (
-              <Button variant="outline-light" className="ms-3" onClick={logout}>
+              <Button variant="outline-light" size="sm" onClick={handleLogout}>
                 Logout
               </Button>
             )}

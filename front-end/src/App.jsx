@@ -1,33 +1,55 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import AppNavbar from "./components/Navbar";
-import ProtectedRoute from "./components/ProtectedRoute";
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Home from "./pages/Home";
-import Posts from "./pages/Posts";
+import PublicPosts from "./pages/PublicPosts";
+import PostDetail from "./pages/PostDetail";
 import Login from "./pages/Login";
-import Signup from "./pages/Signup";
-
-import MyPosts from "./pages/author/MyPosts";
+import Register from "./pages/Register";
+import ProtectedRoute from "./components/ProtectedRoute";
+import MyPosts from "./pages/Author/MyPosts";
+import CreatePost from "./pages/author/CreatePost";
+import EditPost from "./pages/author/EditPost";
 import Dashboard from "./pages/admin/Dashboard";
-import ManageUsers from "./pages/admin/ManageUsers";
 import ManagePosts from "./pages/admin/ManagePosts";
+import ManageUsers from "./pages/admin/ManageUsers";
 
 function App() {
   return (
-    <BrowserRouter>
+    <>
       <AppNavbar />
+      <ToastContainer position="top-right" autoClose={3000} />
       <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
-
-        <Route path="/posts" element={<Posts />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/posts" element={<PublicPosts />} />
+        <Route path="/post/:id" element={<PostDetail />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
+        <Route path="/register" element={<Register />} />
 
         <Route
           path="/author/posts"
           element={
             <ProtectedRoute role="AUTHOR">
               <MyPosts />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/author/posts/create"
+          element={
+            <ProtectedRoute role="AUTHOR">
+              <CreatePost />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/author/posts/edit/:id"
+          element={
+            <ProtectedRoute role="AUTHOR">
+              <EditPost />
             </ProtectedRoute>
           }
         />
@@ -59,7 +81,7 @@ function App() {
           }
         />
       </Routes>
-    </BrowserRouter>
+    </>
   );
 }
 

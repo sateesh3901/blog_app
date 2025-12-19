@@ -1,9 +1,11 @@
+import { Container } from "react-bootstrap";
+
 function Home() {
   return (
-    <div style={{ padding: "40px", textAlign: "center" }}>
-      <h1>Blog Platform</h1>
-      <p>Read, write, and share knowledge.</p>
-    </div>
+    <Container className="mt-5 text-center">
+      <h1>Welcome to Blog Platform</h1>
+      <p>Read public blogs written by authors</p>
+    </Container>
   );
 }
 
