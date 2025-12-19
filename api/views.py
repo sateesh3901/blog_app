@@ -9,7 +9,6 @@ from django.http import JsonResponse
 from .utils import hash_password,check_password,generate_jwt
 from rest_framework import status
 from rest_framework.views import APIView
-from rest_framework.pagination import PageNumberPagination
 
 # Create your views here.
 @api_view(['POST'])
@@ -120,15 +119,14 @@ def update_user_role(request, id):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated, IsAdmin])
 def pending_posts(request):
-    posts = Post.objects.filter(status=Post.Status.PENDING).order_by('-created_at')
+    posts = Post.objects.filter(status=Post.Status.PENDING)
+    serializer = PostSerializer(posts, many=True)
 
-    paginator = PageNumberPagination()
-    paginator.page_size = 5
-    result_page = paginator.paginate_queryset(posts, request)
-
-    serializer = PostSerializer(result_page, many=True)
-    return paginator.get_paginated_response(serializer.data)
-
+    return JsonResponse(
+        serializer.data,
+        safe=False,
+        status=status.HTTP_200_OK
+    )
 
 
 @api_view(['PUT'])
@@ -298,14 +296,14 @@ class MyPostsView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        posts = Post.objects.filter(author=request.user).order_by('-created_at')
+        posts = Post.objects.filter(author=request.user)
+        serializer = PostSerializer(posts, many=True)
 
-        paginator = PageNumberPagination()
-        paginator.page_size = 5
-        result_page = paginator.paginate_queryset(posts, request)
-
-        serializer = PostSerializer(result_page, many=True)
-        return paginator.get_paginated_response(serializer.data)
+        return JsonResponse(
+            serializer.data,
+            safe=False,
+            status=status.HTTP_200_OK
+        )
 
 
 
