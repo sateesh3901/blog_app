@@ -326,13 +326,21 @@ class PublicPostView(APIView):
             serializer = PostSerializer(post)
             return JsonResponse(serializer.data, status=status.HTTP_200_OK)
 
-        posts = Post.objects.filter(status=Post.Status.APPROVED)
+        posts = (
+            Post.objects
+            .filter(status=Post.Status.APPROVED)
+            .order_by("-created_at")
+        )
+
         serializer = PostSerializer(posts, many=True)
 
         return JsonResponse(
             serializer.data,
             safe=False,
             status=status.HTTP_200_OK
+        )
+
+
         )
 
 
